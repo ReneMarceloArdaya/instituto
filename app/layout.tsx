@@ -11,6 +11,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./(routes)/(root)/Components/AppSidebar/AppSidebar";
+import { Footer, Navbar } from "@/components/Shared";
 
 
 
@@ -36,15 +37,14 @@ export default function RootLayout({
         <body className={`${spaceGrotesk.variable} antialiased`}>
           <SidebarProvider>
             <AppSidebar/>
-            <main className="flex-1">{children}</main>
+            <div className="w-full bg-stone-100 flex flex-col min-h-screen">
+                <Navbar/>
+          
+                <main className="flex-1">{children}</main>
+                <Footer/>
+             </div>
           </SidebarProvider>
-          <SignedOut>
-            <SignInButton />
-            <SignUpButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+         
         </body>
       </html>
     </ClerkProvider>
