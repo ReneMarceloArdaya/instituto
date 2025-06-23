@@ -12,14 +12,8 @@ export default function AuthLayout({
                 <div className="absolute top-0 left-0 h-full w-full
                 bg-gradient-to-r from-amber-200 to-yellow-400 z-[-1]"/>
                     {children}
-                
-                
-
             </div>
-           
-           
         </div>
-
     );
 }    
 

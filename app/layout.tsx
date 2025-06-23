@@ -6,16 +6,19 @@ import {
   SignedIn,
   SignedOut,
   UserButton,
-} from '@clerk/nextjs'
+} from "@clerk/nextjs";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSidebar from "./(routes)/(root)/Components/AppSidebar/AppSidebar";
+
+
+
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
 });
-
-
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,16 +34,17 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${spaceGrotesk.variable} antialiased`}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-          {children}
+          <SidebarProvider>
+            <AppSidebar/>
+            <main className="flex-1">{children}</main>
+          </SidebarProvider>
+          <SignedOut>
+            <SignInButton />
+            <SignUpButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </body>
       </html>
     </ClerkProvider>
