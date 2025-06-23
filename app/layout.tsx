@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
 import {
   ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
 } from "@clerk/nextjs";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "./(routes)/(root)/Components/AppSidebar/AppSidebar";
 import { Footer, Navbar } from "@/components/Shared";
-
+import { Toaster } from "@/components/ui/sonner";
 
 
 
@@ -34,13 +29,14 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${spaceGrotesk.variable} antialiased`}>
+        <body className={`${spaceGrotesk.className} antialiased`}>
           <SidebarProvider>
             <AppSidebar/>
             <div className="w-full bg-stone-100 flex flex-col min-h-screen">
                 <Navbar/>
           
                 <main className="flex-1">{children}</main>
+                <Toaster/>
                 <Footer/>
              </div>
           </SidebarProvider>
