@@ -1,6 +1,12 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { CourseForm, CourseImage, HeaderCourse } from "./components";
+import {
+  ChaptersBlock,
+  CourseForm,
+  CourseImage,
+  CoursePrice,
+  HeaderCourse,
+} from "./components";
 
 export default async function CoursePage({
   params,
@@ -20,7 +26,11 @@ export default async function CoursePage({
       userId: userId,
     },
     include: {
-      chapters: true,
+      chapters: {
+        orderBy: {
+          position: "asc"
+        }
+      }
     },
   });
 
@@ -35,7 +45,9 @@ export default async function CoursePage({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
         <CourseImage idCourse={course.id} imageCourse={course.imageUrl} />
+        <CoursePrice idCourse={course.id} priceCourse={course.price} />
       </div>
+      <ChaptersBlock idCourse={course.id} chapters={course.chapters} />
     </div>
   );
 }
