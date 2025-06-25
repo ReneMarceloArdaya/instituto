@@ -1,8 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { Header } from "./components";
 import prisma from "@/lib/prisma";
-
-
+import { ListCourses } from "./components/ListCourses";
 
 export default async function TeacherPage() {
   const user = await currentUser();
@@ -12,12 +11,14 @@ export default async function TeacherPage() {
 
   const courses = await prisma.course.findMany({
     where: {
-      userId: user.id
-    }
-  })
-  console.log(courses)
+      userId: user.id,
+    },
+  });
 
-  return <div>
-    <Header/>
-  </div>;
+  return (
+    <div>
+      <Header />
+      <ListCourses courses={courses} />
+    </div>
+  );
 }
