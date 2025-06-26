@@ -27,6 +27,7 @@ export default async function ChapterPage({
   return (
     <div className="m-6">
         <ChapterForm chapter={chapter} courseId={courseId}/>
+        
     </div>
   )
 }

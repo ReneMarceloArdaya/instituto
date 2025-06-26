@@ -110,7 +110,7 @@ export function ChapterTitleForm(props: ChapterTitleFormProps) {
             )}
           />
 
-          <Button type="submit" className="px-20 mt-10">
+          <Button type="submit" className="px-20 mt-10 cursor-pointer">
             Guardar
           </Button>
         </form>

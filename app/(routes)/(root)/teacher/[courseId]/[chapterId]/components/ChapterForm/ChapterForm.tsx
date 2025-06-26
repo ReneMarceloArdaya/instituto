@@ -7,6 +7,7 @@ import { TitleBlock } from "../../../components";
 import axios from "axios";
 import { toast } from "sonner";
 import { ChapterTitleForm } from "./ChapterTitleForm";
+import { ChapterVideoForm } from "./ChapterVideoForm";
 
 export function ChapterForm(props : ChapterFormProps) {
   const { chapter, courseId } = props;
@@ -23,11 +24,21 @@ export function ChapterForm(props : ChapterFormProps) {
       });
       toast("Capítulo publicado");
       router.refresh();
-   } catch (error) {
+   } catch{
     toast.error("Error al publicar el capítulo");
-    console.log(error);
    }
   };
+
+  const removeChapter = async () => {
+    try {
+      await axios.delete(`/api/course/${courseId}/chapter/${chapter.id}`);
+      router.push("/teacher/[courseId]");
+      toast("Capítulo eliminado");
+    } catch {
+      toast.error("Error al eliminar el capítulo");
+    }
+  };
+
   return <div>
     <div className="p-6 bg-white rounded-md">
       <Button className="mb-4" variant="outline" onClick={() => router.back()}>
@@ -50,7 +61,7 @@ export function ChapterForm(props : ChapterFormProps) {
           >Publicar</Button>
         )} 
         <Button variant={"destructive"}
-          onClick={() => console.log("borrar")}
+          onClick={() => removeChapter}
         >
           <Trash/>
         </Button>
@@ -58,5 +69,7 @@ export function ChapterForm(props : ChapterFormProps) {
     </div>
 
     <ChapterTitleForm courseId={courseId} chapter={chapter}/>
+    <ChapterVideoForm courseId={courseId} chapterId={chapter.id} videoUrl={chapter.videoUrl}/>
+
   </div>;
 }
