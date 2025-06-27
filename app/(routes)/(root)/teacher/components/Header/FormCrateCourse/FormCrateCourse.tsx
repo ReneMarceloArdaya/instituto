@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
-
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,23 +14,32 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { formSchema } from "./FormCrateCourse.form"
-
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { formSchema } from "./FormCrateCourse.form";
+import { toast } from "sonner";
 
 export function FormCrateCourse() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       courseName: "",
       slug: "",
     },
-  })
- 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-  }
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const res = await axios.post("/api/course", values);
+      toast.success("Curso creado correctamente");
+      router.push(`/teacher/${res.data.id}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al crear el curso");
+    }
+  };
 
   return (
     <Form {...form}>
@@ -43,7 +53,7 @@ export function FormCrateCourse() {
               <FormControl>
                 <Input placeholder="Curso de NodeJs" {...field} />
               </FormControl>
-              
+
               <FormMessage />
             </FormItem>
           )}
@@ -57,7 +67,7 @@ export function FormCrateCourse() {
               <FormControl>
                 <Input placeholder="curso-nodejs" {...field} />
               </FormControl>
-              
+
               <FormMessage />
             </FormItem>
           )}
@@ -65,5 +75,5 @@ export function FormCrateCourse() {
         <Button type="submit">Crear Curso</Button>
       </form>
     </Form>
-  )
+  );
 }
