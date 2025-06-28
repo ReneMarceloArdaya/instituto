@@ -49,7 +49,7 @@ export function CourseForm(props: CourseFormProps) {
 
   const onSubmit = async(values: z.infer<typeof formSchema>) => {
     try {
-      axios.patch(`/api/courses/${course.id}`, values);
+      axios.patch(`/api/course/${course.id}`, values);
       toast.success("Información actualizada");
       router.refresh();
     } catch{

@@ -21,7 +21,9 @@ export	async function PATCH(
 				id: courseId,
 				userId: userId,
 			},
-			data: values
+			data: {
+        ...values
+      }
 		});
 
 		return NextResponse.json(course);

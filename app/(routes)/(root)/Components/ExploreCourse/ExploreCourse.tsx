@@ -1,13 +1,35 @@
 "use client";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { searchCourses } from "@/actions/searchCourses";
+import { SearchFormClient } from "../SharedCourse";
+import { ListCourses } from "@/components/Shared";
+
 
 
 export function ExploreCourse() {
+  const [courses, setCourses] = useState<any[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
+  const fetchCourses = async (term?: string) => {
+    setIsLoading(true);
+    try {
+      const result = await searchCourses(term);
+      setCourses(result);
+    } catch (error) {
+      console.error("Error al buscar cursos:", error);
+      setCourses([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    fetchCourses();
+  }, []);
 
   return (
+    <>
     <div className="my-6">
       <div className="mx-4">
         <div className="border rounded-xl bg-white shadow-lg overflow-hidden">
@@ -20,16 +42,7 @@ export function ExploreCourse() {
                 Encuentra la formación que necesitas para impulsar tu carrera.
                 Cursos diseñados por expertos y adaptados a tu ritmo.
               </p>
-
-              <div className="mt-4 relative flex items-center">
-                <Search className="absolute left-4 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Busca por curso..."
-                  className="w-full pl-12 pr-4 py-3 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-
-                />
-              </div>
+              <SearchFormClient onSearch={fetchCourses} isLoading={isLoading} />
             </div>
 
             <div className="relative hidden md:block">
@@ -45,5 +58,7 @@ export function ExploreCourse() {
         </div>
       </div>
     </div>
+    <ListCourses title="Cursos" courses={courses}/>
+    </>
   );
 }

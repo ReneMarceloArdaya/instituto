@@ -1,15 +1,13 @@
-
-import { getHomeCourses } from "@/actions/getHomeCourses";
-import { ExploreCourse } from "./Components";
-import { ListCourses } from "@/components/Shared";
+import { currentUser } from "@clerk/nextjs/server";
+import { VerificationUserId } from "./Components/VerificationUserId";
 
 export default async function Home() {
-    const listCourses = await getHomeCourses();
+  const user = await currentUser();
+  const userId = user?.id ?? null;
 
   return (
     <div>
-        <ExploreCourse/>
-        <ListCourses title="Cursos" courses={listCourses} />
+      <VerificationUserId userId={userId} />
     </div>
-)
+  );
 }
