@@ -1,19 +1,27 @@
-"use client"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { Loader2, Search } from "lucide-react"
+"use client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Loader2, Search } from "lucide-react";
 
-export function SearchFormClient({ onSearch, isLoading }: { onSearch: (term: string) => void, isLoading: boolean }) {
-  const [searchTerm, setSearchTerm] = useState("")
+export function SearchFormClient({
+  onSearch,
+  isLoading,
+}: {
+  onSearch: (term: string) => void;
+  isLoading: boolean;
+}) {
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = () => {
-    if (searchTerm.trim()) onSearch(searchTerm)
-  }
+    if (searchTerm.trim() || searchTerm === "") {
+      onSearch(searchTerm);
+    }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") handleSearch()
-  }
+    if (e.key === "Enter") handleSearch();
+  };
 
   return (
     <div className="relative flex items-center space-x-2">
@@ -28,13 +36,9 @@ export function SearchFormClient({ onSearch, isLoading }: { onSearch: (term: str
       <div className="absolute left-3 text-gray-500">
         <Search size={18} />
       </div>
-      <Button
-        variant="default"
-        onClick={handleSearch}
-        disabled={isLoading}
-      >
+      <Button variant="default" onClick={handleSearch} disabled={isLoading}>
         {isLoading ? <Loader2 className="animate-spin w-4 h-4" /> : "Buscar"}
       </Button>
     </div>
-  )
+  );
 }

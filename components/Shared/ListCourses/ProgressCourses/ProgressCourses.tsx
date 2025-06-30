@@ -3,36 +3,57 @@
 
 import { useEffect, useState } from "react";
 import { ProgressCoursesProps } from "./ProgressCourses.type";
-import { getUserProgressByCourse } from "@/actions/getUserProgressByCourse";
-import { useUserStore } from "@/lib/store/UserStore";
 import { Progress } from "@/components/ui/progress";
 import { formatPrice } from "@/lib/formarPrice";
+import { useUser } from "@clerk/nextjs";
+import { Loader2, AlertTriangle } from "lucide-react";
+import axios from "axios";
 
 export function ProgressCourses(props: ProgressCoursesProps) {
   const { courseId, totalChapters, price } = props;
-  const userId = useUserStore((state) => state.userId);
+  const { user} = useUser();
 
-  const [progressCourse, setProgressCourse] = useState<number | null>(null);
+  const [progressCourse, setProgressCourse] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!userId) return;
-
     const fetchProgress = async () => {
-      const progress = await getUserProgressByCourse(courseId, userId);
-      setProgressCourse(progress);
-    };
+      if(!user?.id) return setLoading(false);
+      try {
+        const { data } = await axios.post("/api/get-user-progress",
+          {
+            courseId: courseId,
+            userId: user.id,
+          });
+          setProgressCourse(data.progress);
+      } catch (error) {
+        console.log("Error al obtener el progreso:", error);
+      }finally{
+        setLoading(false);
+      }
+    }
 
     fetchProgress();
-  }, [userId, courseId]);
+  }, [user?.id, courseId]);
 
-  if (!userId) {
-    return <p>Not logged in</p>;
+  if (!user?.id) {
+    return (
+      <div className="flex items-center gap-2 text-sm text-red-500 mt-2">
+        <AlertTriangle className="w-4 h-4" />
+        Usuario no autenticado
+      </div>
+    );
   }
 
-  if (progressCourse === null) {
-    return <p>Cargando progreso...</p>;
+  if(loading){
+    return (
+      <div className="flex items-center gap-2 text-sm text-violet-500 mt-2">
+        <Loader2 className="w-4 h-4 animate-spin" />
+        Cargando progreso...
+      </div>
+    );
   }
-
+  
   return (
     <div className="mt-4">
       {totalChapters > 0 && progressCourse > 0 ? (
