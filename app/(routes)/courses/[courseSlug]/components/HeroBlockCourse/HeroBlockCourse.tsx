@@ -10,7 +10,6 @@ import Image from "next/image";
 import axios from "axios";
 import { toast } from "sonner";
 
-
 export function HeroBlockCourse(props: HeroBlockCourseProps) {
   const { course, purchaseCourse } = props;
   const {
@@ -22,31 +21,27 @@ export function HeroBlockCourse(props: HeroBlockCourseProps) {
     level,
     chapters,
     updatedAt,
-    slug
+    slug,
   } = course;
 
-  
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const enrollCourse = async () => {
     setIsLoading(true);
-    console.log("price:", price);
-    if(price === "Gratis"){
-        try {
-            await axios.post(`/api/course/${id}/enroll`);
-            toast("Inscripción exitosa");
-            router.push(`/courses/${slug}/${chapters[0].id}`);
-        } catch (error) {
-            toast.error("Error al inscribir");
-            console.error("Error al inscribir:", error); 
-        }
-        finally{
-            setIsLoading(true);
-        }
+    try {
+      await axios.post(`/api/course/${id}/enroll`, {
+        price: price === "Gratis" ? 0 : Number(price),
+      });
+      toast("Inscripción exitosa");
+      router.push(`/courses/${slug}/${chapters[0].id}`);
+    } catch (error) {
+      toast.error("Error al inscribir");
+      console.error("Error al inscribir:", error);
+    } finally {
+      setIsLoading(true);
     }
-    
-  }
+  };
 
   const redirectToCourse = () => {
     router.push(`/courses/${slug}/${chapters[0].id}`);
@@ -69,26 +64,31 @@ export function HeroBlockCourse(props: HeroBlockCourseProps) {
         </div>
         <h2 className="text-xl font-semibold my-4">{formatPrice(price)}</h2>
 
-        {
-            purchaseCourse ? (
-                <Button className="hover:bg-violet-400 text-white font-semibold"
-                    disabled={isLoading}
-                    onClick={redirectToCourse}
-                >
-                    Ver Curso
-                </Button>
-            ):(
-                <Button className="hover:bg-violet-400 text-white font-semibold"
-                    disabled={isLoading}
-                    onClick={enrollCourse}
-                >
-                    Inscribirse Ahora
-                </Button>
-            )
-        }
+        {purchaseCourse ? (
+          <Button
+            className="hover:bg-violet-400 text-white font-semibold"
+            disabled={isLoading}
+            onClick={redirectToCourse}
+          >
+            Ver Curso
+          </Button>
+        ) : (
+          <Button
+            className="hover:bg-violet-400 text-white font-semibold"
+            disabled={isLoading}
+            onClick={enrollCourse}
+          >
+            Inscribirse Ahora
+          </Button>
+        )}
       </div>
-      <Image src={imageUrl || "/Default_Img.png"} alt={title} width={400} height={400} className="rounded-md" />
-
+      <Image
+        src={imageUrl || "/Default_Img.png"}
+        alt={title}
+        width={400}
+        height={400}
+        className="rounded-md"
+      />
     </div>
   );
 }

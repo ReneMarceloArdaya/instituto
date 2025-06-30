@@ -13,7 +13,7 @@ export default async function CertificatesPage() {
     return <p>Not logged in</p>;
   }
 
-  const userName = `${user.firstName} ${user.lastName}`;
+  const userName = `${user.firstName} ${user.lastName? user.lastName : ""}`;
 
   if (!courses) {
     return null;
