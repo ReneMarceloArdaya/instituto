@@ -38,6 +38,12 @@ export function ChapterTitleForm(props: ChapterTitleFormProps) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+
+      if (values.description.length > 5000) {
+        toast.error("La descripción no puede tener más de 1000 caracteres");
+        return;
+      }
+
       await axios.patch(`/api/course/${courseId}/chapter/${chapter.id}`, {
         title: values.title,
         description: values.description,
