@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "sonner";
+import { StaticMap } from "@/components/Shared/ListCourses/StaticMap";
 
 export function HeroBlockCourse(props: HeroBlockCourseProps) {
   const { course, purchaseCourse } = props;
@@ -22,6 +23,9 @@ export function HeroBlockCourse(props: HeroBlockCourseProps) {
     chapters,
     updatedAt,
     slug,
+    TypeCourse,
+    latitud,
+    longitud,
   } = course;
 
   const router = useRouter();
@@ -47,7 +51,7 @@ export function HeroBlockCourse(props: HeroBlockCourseProps) {
     router.push(`/courses/${slug}/${chapters[0].id}`);
   };
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
       <div>
         <h2 className="text-3xl font-semibold">{title}</h2>
         <p className="text-balance mt-2">{description}</p>
@@ -89,6 +93,11 @@ export function HeroBlockCourse(props: HeroBlockCourseProps) {
         height={400}
         className="rounded-md"
       />
+
+      {TypeCourse === "presencial" && (
+        <StaticMap position={[latitud,longitud]} />
+      )}
+      
     </div>
   );
 }

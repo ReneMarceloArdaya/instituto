@@ -1,8 +1,14 @@
 import prisma from "@/lib/prisma";
 import { format, subMonths , startOfMonth } from "date-fns";
 import { es } from "date-fns/locale";
+import { auth } from "@clerk/nextjs/server";
 
 export async function getSuscribesByMonth() {
+    const {userId} = await auth();
+    if(!userId){
+        return []
+    }
+
     const now = new Date();
     const sixMonthsAgo = startOfMonth(subMonths(now, 5));
 
@@ -10,6 +16,9 @@ export async function getSuscribesByMonth() {
         where: {
             createdAt: {
                 gte: sixMonthsAgo,
+            },
+            course: {
+                userId: userId,
             }
         },
         select: {

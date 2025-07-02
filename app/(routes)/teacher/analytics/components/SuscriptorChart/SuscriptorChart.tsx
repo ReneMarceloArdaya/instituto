@@ -32,9 +32,9 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function SuscriptorChart() {
-  const [data, setData] = useState<SuscriptorChartProps[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [chart, setData] = useState<SuscriptorChartProps[]>([]);
   const [growth, setGrowth] = useState<GrowthDataProps | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchSubscribers = async () => {
@@ -74,7 +74,7 @@ export function SuscriptorChart() {
           <ChartContainer config={chartConfig}>
             <BarChart
               accessibilityLayer
-              data={data}
+              data={chart}
               margin={{
                 top: 20,
               }}

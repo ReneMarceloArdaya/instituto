@@ -1,6 +1,7 @@
 import { CourseCard } from "./CourseCard";
 import { ListCoursesProps } from "./ListCourses.type";
 
+
 export function ListCourses(props: ListCoursesProps) {
   const { courses } = props;
 

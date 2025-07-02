@@ -1,3 +1,5 @@
 export * from "./AppSidebar"
 export * from "./ExploreCourse"
 export * from "./SharedCourse"
+export * from "./DetectLocation"
+export * from "./SetUserMetadata"

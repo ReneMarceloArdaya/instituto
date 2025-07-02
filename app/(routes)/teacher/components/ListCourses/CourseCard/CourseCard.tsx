@@ -2,6 +2,7 @@ import Image from "next/image";
 import { CourseCardProps } from "./CourseCard.type";
 import { ChartNoAxesColumn, DollarSign } from "lucide-react";
 import { Actions } from "./Actions";
+import { formatPrice } from "@/lib/formarPrice";
 
 export function CourseCard(props: CourseCardProps) {
   const { course } = props;
@@ -40,7 +41,7 @@ export function CourseCard(props: CourseCardProps) {
               <div className="flex gap-1 items-center text-sm mt-2">
                 <DollarSign className="h-4 w-4 text-gray-400"/>
                 <span className="text-gray-400">Precio:</span>
-                <span className="font-semibold">{price || 0} Bs</span>
+                <span className="font-semibold">{formatPrice(price)}</span>
               </div>
 
               <div className="flex flex-col md:flex-row gap-4 items-center">

@@ -6,15 +6,23 @@ import { useState } from "react";
 import { ListCoursesProps } from "./ListCourses.type";
 import { Button } from "@/components/ui/button";
 import { IconBadge } from "../IconBadge";
-import { Book, ChartNoAxesColumn, Loader2 } from "lucide-react";
+import {
+  Book,
+  ChartNoAxesColumn,
+  Loader2,
+  MapPin,
+  Monitor,
+} from "lucide-react";
 import { ProgressCourses } from "./ProgressCourses/ProgressCourses";
+
+
+
 
 const COURSES_PER_PAGE = 20;
 
 export function ListCourses(props: ListCoursesProps) {
   const { title, courses } = props;
   const [currentPage, setCurrentPage] = useState(1);
-
   const totalCourses = courses?.length ?? 0;
   const totalPages = Math.ceil(totalCourses / COURSES_PER_PAGE);
 
@@ -62,6 +70,7 @@ export function ListCourses(props: ListCoursesProps) {
                     sizes="(max-width: 500px) 100vw 1200px"
                   />
                 </div>
+                
                 <div className="p-2">
                   <h3 className="text-xl font-semibold text-gray-800 truncate">
                     {course.title}
@@ -74,6 +83,17 @@ export function ListCourses(props: ListCoursesProps) {
                     <IconBadge
                       icon={ChartNoAxesColumn}
                       text={course.level || ""}
+                    />
+                    <IconBadge
+                      text={
+                        course.TypeCourse
+                          ? course.TypeCourse.charAt(0).toUpperCase() +
+                            course.TypeCourse.slice(1)
+                          : ""
+                      }
+                      icon={
+                        course.TypeCourse === "presencial" ? MapPin : Monitor
+                      }
                     />
                   </div>
                   <ProgressCourses

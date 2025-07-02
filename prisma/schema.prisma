@@ -23,6 +23,9 @@ model Course {
   price String?
   isPublished Boolean @default(false)
   level String? @db.Text
+  TypeCourse String? @db.Text
+  latitud Float?
+  longitud Float?
 
   category String? @db.Text
   chapters Chapter[]

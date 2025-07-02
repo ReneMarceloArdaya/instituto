@@ -16,10 +16,21 @@ import {
 import Link from "next/link";
 import { routes, rutesTeacher } from "./AppSidebar.Data";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+
 
 export default function AppSidebar() {
   const { state } = useSidebar();
+  const [privateMeta, setPrivateMeta] = useState<any>(null);
 
+  useEffect(() => {
+    fetch("/api/get-private-metadata")
+      .then((res) => res.json())
+      .then((data) => setPrivateMeta(data.privateMetadata))
+      .catch(console.error);
+  }, []);
+
+  
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="bg-white">
@@ -30,7 +41,7 @@ export default function AppSidebar() {
               alt="Logo Academia"
               width={55}
               height={55}
-              style={{ borderRadius: "20%" , paddingRight: "5px"}}
+              style={{ borderRadius: "20%", paddingRight: "5px" }}
             />
             {state === "expanded" && (
               <span className="text-xl font-semibold text-gray-800 tracking-wide">
@@ -56,26 +67,28 @@ export default function AppSidebar() {
               </SidebarMenuItem>
             ))}
           </SidebarMenu>
-          <SidebarMenu className="mt-4">
-            <SidebarGroupLabel>Profesor</SidebarGroupLabel>
-            <SidebarMenuItem>
-              <SidebarMenuSub>
-                {rutesTeacher.map((item) => (
-                  <SidebarMenuSubItem key={item.title}>
-                    <SidebarMenuSubButton
-                      href={item.url}
-                      className="hover:bg-muted transition"
-                    >
-                      <div className="p-1 rounded-lg text-white bg-slate-400">
-                        <item.icon className="w-4 h-4" />
-                      </div>
-                      {item.title}
-                    </SidebarMenuSubButton>
-                  </SidebarMenuSubItem>
-                ))}
-              </SidebarMenuSub>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          {privateMeta?.isProfesor && (
+            <SidebarMenu className="mt-4">
+              <SidebarGroupLabel>Profesor</SidebarGroupLabel>
+              <SidebarMenuItem>
+                <SidebarMenuSub>
+                  {rutesTeacher.map((item) => (
+                    <SidebarMenuSubItem key={item.title}>
+                      <SidebarMenuSubButton
+                        href={item.url}
+                        className="hover:bg-muted transition"
+                      >
+                        <div className="p-1 rounded-lg text-white bg-slate-400">
+                          <item.icon className="w-4 h-4" />
+                        </div>
+                        {item.title}
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  ))}
+                </SidebarMenuSub>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          )}
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
