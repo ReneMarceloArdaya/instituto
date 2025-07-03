@@ -1,14 +1,14 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 export async function POST(
-  req: Request,
-  { params }: { params: { courseId: string } }
+  req: NextRequest,
+  context: { params: { courseId: string } }
 ) {
   try {
     const { userId } = await auth();
-    const { courseId } = params;
+    const { courseId } = context.params;
     const body = await req.json();
     const { price } = body;
 
